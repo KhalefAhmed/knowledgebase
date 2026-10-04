@@ -2,6 +2,7 @@ plugins {
     id("io.micronaut.application") version "5.0.2"
     id("com.gradleup.shadow") version "9.4.1"
     id("io.micronaut.aot") version "5.0.2"
+    id("io.micronaut.test-resources") version "5.0.2"
 }
 
 version = "0.1"
@@ -28,6 +29,8 @@ dependencies {
     runtimeOnly("io.netty:netty-resolver-dns-native-macos::osx-aarch_64")
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testResourcesService(platform("io.micronaut.langchain4j:micronaut-langchain4j-bom:2.2.1-SNAPSHOT"))
+    testResourcesService("io.micronaut.langchain4j:micronaut-langchain4j-infinispan-testresource")
 }
 
 
