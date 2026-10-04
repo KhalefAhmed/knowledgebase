@@ -19,7 +19,7 @@ dependencies {
     annotationProcessor("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation(platform("io.micronaut.langchain4j:micronaut-langchain4j-bom:2.2.1-SNAPSHOT"))
+    implementation(platform("io.micronaut.langchain4j:micronaut-langchain4j-bom:2.3.1-SNAPSHOT"))
     implementation("io.micronaut.langchain4j:micronaut-langchain4j-ollama")
     implementation("io.micronaut.langchain4j:micronaut-langchain4j-store-infinispan")
 
@@ -29,7 +29,7 @@ dependencies {
     runtimeOnly("io.netty:netty-resolver-dns-native-macos::osx-aarch_64")
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testResourcesService(platform("io.micronaut.langchain4j:micronaut-langchain4j-bom:2.2.1-SNAPSHOT"))
+    testResourcesService(platform("io.micronaut.langchain4j:micronaut-langchain4j-bom:2.3.1-SNAPSHOT"))
     testResourcesService("io.micronaut.langchain4j:micronaut-langchain4j-infinispan-testresource")
 }
 

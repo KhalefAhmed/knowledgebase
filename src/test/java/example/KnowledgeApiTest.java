@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Teste l'API avec un vrai Infinispan démarré par le module Test Resources.
- * Les modèles Ollama sont remplacés par des faux pour ne pas dépendre d'Ollama.
+ * Tests the API against a real Infinispan started by the Test Resources module.
+ * The Ollama models are replaced by fakes so the test does not depend on Ollama.
  */
 @MicronautTest(transactional = false)
 class KnowledgeApiTest {
@@ -40,15 +40,15 @@ class KnowledgeApiTest {
         var created = client.toBlocking().exchange(
                 HttpRequest.POST("/api/documents", Map.of(
                         "source", "guide.md",
-                        "content", "Infinispan supporte la recherche vectorielle.")),
+                        "content", "Infinispan supports vector search.")),
                 Map.class);
         assertEquals(HttpStatus.CREATED, created.getStatus());
         assertEquals(1, created.body().get("chunksIndexed"));
 
         var answer = client.toBlocking().retrieve(
-                HttpRequest.POST("/api/ask", Map.of("question", "Infinispan supporte la recherche vectorielle.")),
+                HttpRequest.POST("/api/ask", Map.of("question", "Infinispan supports vector search.")),
                 Map.class);
-        assertEquals("réponse de test", answer.get("answer"));
+        assertEquals("test answer", answer.get("answer"));
         var sources = (List<?>) answer.get("sources");
         assertEquals("guide.md", ((Map<?, ?>) sources.getFirst()).get("source"));
     }
@@ -56,12 +56,12 @@ class KnowledgeApiTest {
     @Test
     void deleteRemovesTheSource() {
         client.toBlocking().exchange(HttpRequest.POST("/api/documents", Map.of(
-                "source", "temp.md", "content", "Contenu temporaire à supprimer.")));
+                "source", "temp.md", "content", "Temporary content to delete.")));
         var deleted = client.toBlocking().exchange(HttpRequest.DELETE("/api/documents/temp.md"));
         assertEquals(HttpStatus.NO_CONTENT, deleted.getStatus());
 
         var answer = client.toBlocking().retrieve(
-                HttpRequest.POST("/api/ask", Map.of("question", "Contenu temporaire à supprimer.")),
+                HttpRequest.POST("/api/ask", Map.of("question", "Temporary content to delete.")),
                 Map.class);
         var sources = (List<?>) answer.get("sources");
         assertTrue(sources.stream().noneMatch(s -> "temp.md".equals(((Map<?, ?>) s).get("source"))));
@@ -87,20 +87,20 @@ class KnowledgeApiTest {
             return new ChatModel() {
                 @Override
                 public String chat(String message) {
-                    return "réponse de test";
+                    return "test answer";
                 }
 
                 @Override
                 public dev.langchain4j.model.chat.response.ChatResponse doChat(
                         dev.langchain4j.model.chat.request.ChatRequest request) {
                     return dev.langchain4j.model.chat.response.ChatResponse.builder()
-                            .aiMessage(dev.langchain4j.data.message.AiMessage.from("réponse de test"))
+                            .aiMessage(dev.langchain4j.data.message.AiMessage.from("test answer"))
                             .build();
                 }
             };
         }
 
-        // Vecteur déterministe : même texte, même vecteur (score maximal).
+        // Deterministic vector: same text gives the same vector (maximum score).
         private static Embedding vector(String text) {
             float[] values = new float[DIMENSION];
             for (int i = 0; i < DIMENSION; i++) {
