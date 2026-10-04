@@ -1,54 +1,53 @@
 # Knowledgebase
 
-API de recherche augmentée (RAG) avec Micronaut, Ollama et Infinispan. Les
-documents et leurs embeddings sont stockés dans Infinispan; les modèles de
-chat et d'embeddings s'exécutent localement avec Ollama.
+Retrieval-augmented generation (RAG) API built with Micronaut, Ollama, and
+Infinispan. Documents and their embeddings are stored in Infinispan, while
+the chat and embedding models run locally with Ollama.
 
-## Démarrer
+## Getting started
 
-Prérequis : Docker Compose, Java 25 et les modules Micronaut LangChain4j
-`2.2.1-SNAPSHOT` disponibles dans Maven Local.
+Prerequisites: Docker Compose, Java 25, and the Micronaut LangChain4j
+`2.2.1-SNAPSHOT` modules available in the local Maven repository.
 
 ```bash
 docker compose up -d
 ./gradlew run
 ```
 
-Au premier démarrage, Ollama télécharge `qwen2.5:3b` et `nomic-embed-text`.
-Le premier modèle sert aux réponses et le second aux vecteurs de 768
-dimensions. Les données Infinispan et les modèles Ollama persistent dans des
-volumes Docker.
+On first startup, Ollama downloads `qwen2.5:3b` and `nomic-embed-text`.
+The first model generates responses, while the second produces 768-dimensional
+vectors. Infinispan data and Ollama models are persisted in Docker volumes.
 
-Infinispan utilise `admin` / `admin` pour le développement local. Ces valeurs
-sont définies dans `docker-compose.yml` et `src/main/resources/application.yml`.
+Infinispan uses `admin` / `admin` for local development. These values are
+defined in `docker-compose.yml` and `src/main/resources/application.yml`.
 
 ## API
 
-Indexer ou remplacer un document Markdown ou texte :
+Index or replace a Markdown or plain-text document:
 
 ```bash
 curl -X POST http://localhost:8080/api/documents \
   -H 'Content-Type: application/json' \
-  -d '{"source":"guide.md","content":"Le contenu du document à indexer."}'
+  -d '{"source":"guide.md","content":"The document content to index."}'
 ```
 
-Poser une question à la base :
+Ask the knowledge base a question:
 
 ```bash
 curl -X POST http://localhost:8080/api/ask \
   -H 'Content-Type: application/json' \
-  -d '{"question":"Que contient le guide ?","maxResults":5}'
+  -d '{"question":"What does the guide contain?","maxResults":5}'
 ```
 
-La réponse contient le texte généré et les extraits récupérés avec leurs
-sources et scores. `maxResults` est facultatif et limité à 10.
+The response contains the generated text and the retrieved excerpts, including
+their sources and scores. `maxResults` is optional and limited to 10.
 
-Supprimer un document indexé :
+Delete an indexed document:
 
 ```bash
 curl -X DELETE http://localhost:8080/api/documents/guide.md
 ```
 
-Les documents sont découpés en segments d'au plus 1200 caractères. L'API
-accepte des contenus de 500 000 caractères maximum et remplace les anciens
-segments portant la même source lors d'un nouvel indexage.
+Documents are split into segments of up to 1,200 characters. The API accepts
+content of up to 500,000 characters and replaces existing segments with the
+same source when a document is re-indexed.
