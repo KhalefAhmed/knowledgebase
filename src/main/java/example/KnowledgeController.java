@@ -5,10 +5,13 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 
 import java.util.Map;
 
 @Controller("/api")
+@ExecuteOn(TaskExecutors.BLOCKING)
 class KnowledgeController {
     private final KnowledgeService knowledgeService;
 

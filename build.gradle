@@ -22,9 +22,10 @@ dependencies {
     implementation("io.micronaut.langchain4j:micronaut-langchain4j-ollama")
     implementation("io.micronaut.langchain4j:micronaut-langchain4j-store-infinispan")
 
-    compileOnly("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-http-client")
     runtimeOnly("org.yaml:snakeyaml")
     runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("io.netty:netty-resolver-dns-native-macos::osx-aarch_64")
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -33,6 +34,7 @@ dependencies {
 
 application {
     mainClass = "example.Application"
+    applicationDefaultJvmArgs = ["--sun-misc-unsafe-memory-access=allow", "--enable-native-access=ALL-UNNAMED"]
 }
 
 java {

@@ -2,8 +2,8 @@ services:
   infinispan:
     image: quay.io/infinispan/server:16.2.1
     environment:
-      USER: ${INFINISPAN_USERNAME:-admin}
-      PASS: ${INFINISPAN_PASSWORD:-admin}
+      USER: admin
+      PASS: admin
     ports:
       - "11222:11222"
     user: root

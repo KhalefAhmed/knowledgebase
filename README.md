@@ -19,11 +19,8 @@ Le premier modèle sert aux réponses et le second aux vecteurs de 768
 dimensions. Les données Infinispan et les modèles Ollama persistent dans des
 volumes Docker.
 
-Infinispan utilise `admin` / `admin` pour le développement local. Pour
-personnaliser ces identifiants, exportez `INFINISPAN_USERNAME` et
-`INFINISPAN_PASSWORD` avant `docker compose up`; l'application lit les mêmes
-variables. `OLLAMA_BASE_URL`, `OLLAMA_CHAT_MODEL` et
-`OLLAMA_EMBEDDING_MODEL` peuvent aussi remplacer les valeurs par défaut.
+Infinispan utilise `admin` / `admin` pour le développement local. Ces valeurs
+sont définies dans `docker-compose.yml` et `src/main/resources/application.yml`.
 
 ## API
 
