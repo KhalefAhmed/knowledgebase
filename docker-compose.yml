@@ -1,0 +1,34 @@
+services:
+  infinispan:
+    image: quay.io/infinispan/server:15.2
+    environment:
+      USER: ${INFINISPAN_USERNAME:-admin}
+      PASS: ${INFINISPAN_PASSWORD:-admin}
+    ports:
+      - "11222:11222"
+    volumes:
+      - infinispan-data:/opt/infinispan/server/data
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+
+  ollama-models:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command: >-
+      until ollama list >/dev/null 2>&1; do sleep 2; done;
+      ollama pull qwen2.5:3b &&
+      ollama pull nomic-embed-text
+    restart: "no"
+
+volumes:
+  infinispan-data:
+  ollama-data:

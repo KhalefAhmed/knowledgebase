@@ -1,0 +1,26 @@
+micronaut:
+  application:
+    name: knowledgebase
+  server:
+    port: ${PORT:8080}
+
+langchain4j:
+  ollama:
+    base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+    chat-model:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      model-name: ${OLLAMA_CHAT_MODEL:qwen2.5:3b}
+      temperature: 0.2
+    embedding-model:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      model-name: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
+  infinispan:
+    host: ${INFINISPAN_HOST:localhost}
+    port: ${INFINISPAN_PORT:11222}
+    username: ${INFINISPAN_USERNAME:admin}
+    password: ${INFINISPAN_PASSWORD:admin}
+    embedding-store:
+      cache-name: knowledge
+      dimension: 768
+      create-cache: true
+      register-schema: true
