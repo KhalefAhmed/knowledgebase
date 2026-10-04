@@ -44,16 +44,13 @@ final class TextChunker {
         while (start < paragraph.length()) {
             int end = Math.min(start + MAX_CHUNK_LENGTH, paragraph.length());
             if (end < paragraph.length()) {
-                int boundary = paragraph.lastIndexOf(' ', end);
+                int boundary = paragraph.lastIndexOf(' ', end - 1);
                 if (boundary > start) {
-                    end = boundary;
+                    end = boundary + 1;
                 }
             }
-            parts.add(paragraph.substring(start, end).trim());
+            parts.add(paragraph.substring(start, end));
             start = end;
-            while (start < paragraph.length() && paragraph.charAt(start) == ' ') {
-                start++;
-            }
         }
         return parts;
     }

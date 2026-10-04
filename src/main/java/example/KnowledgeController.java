@@ -19,6 +19,9 @@ class KnowledgeController {
     @Post("/documents")
     HttpResponse<?> ingest(@Body IngestRequest request) {
         try {
+            if (request == null) {
+                throw new IllegalArgumentException("request body must not be null");
+            }
             int chunks = knowledgeService.ingest(request.source(), request.content());
             return HttpResponse.created(new IngestResponse(request.source(), chunks));
         } catch (IllegalArgumentException exception) {
@@ -39,6 +42,9 @@ class KnowledgeController {
     @Post("/ask")
     HttpResponse<?> ask(@Body AskRequest request) {
         try {
+            if (request == null) {
+                throw new IllegalArgumentException("request body must not be null");
+            }
             return HttpResponse.ok(knowledgeService.ask(request.question(), request.maxResults()));
         } catch (IllegalArgumentException exception) {
             return HttpResponse.badRequest(Map.of("message", exception.getMessage()));

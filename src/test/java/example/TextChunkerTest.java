@@ -9,13 +9,13 @@ class TextChunkerTest {
 
     @Test
     void splitsParagraphsIntoBoundedChunks() {
-        String paragraph = "a".repeat(TextChunker.MAX_CHUNK_LENGTH + 100);
+        String paragraph = "word ".repeat(TextChunker.MAX_CHUNK_LENGTH / 5 + 100);
 
         var chunks = TextChunker.split(paragraph);
 
         assertEquals(2, chunks.size());
         assertTrue(chunks.stream().allMatch(chunk -> chunk.length() <= TextChunker.MAX_CHUNK_LENGTH));
-        assertEquals(paragraph, String.join("", chunks));
+        assertEquals(paragraph.trim(), String.join("", chunks));
     }
 
     @Test
